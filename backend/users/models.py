@@ -1,6 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/users/<username>/<filename>
+    
+    # The filename parameter is taken directly from the uploaded file object.
+    # it’s the original name of the file as provided by the user when they uploaded it.
+    return "users/{0}/{1}".format(instance.user.username, filename)
+
 class CustomUser(AbstractUser):
-    pass
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
+    is_verified = models.BooleanField(default=False)
+    verification_code = models.CharField(max_length=6, blank=False, null=True)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(CustomUser)
+    bio = models.TextField(blank=True, null=True)
+    avatar = models.ImageField(upload_to=user_directory_path, default='default.jpg', blank=True)
+    favorite_books = models.ManyToManyField('books.Book', on_delete=models.CASCADE)

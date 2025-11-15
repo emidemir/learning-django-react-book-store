@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     # Django apps
     'users',
     'books',
-    'transactions',
+    'interactions',
+    'orders',
 
 
     # --- Allauth apps --- https://docs.allauth.org/en/dev/installation/quickstart.html
