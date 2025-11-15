@@ -104,3 +104,55 @@ body {
     cursor: pointer;
     padding-left: 5px;
 }
+
+/* --- New Styles for Google Sign-In --- */
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #aaa;
+    margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #eee;
+}
+
+.divider:not(:empty)::before {
+    margin-right: .5em;
+}
+
+.divider:not(:empty)::after {
+    margin-left: .5em;
+}
+
+.google-auth-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #fff;
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.google-auth-btn:hover {
+    background-color: #f7f7f7;
+    border-color: #ccc;
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+}
