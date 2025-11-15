@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --background-color: #f4f6f8;
+    --card-background: #ffffff;
+    --text-color: #333;
+    --button-hover: #2980b9;
+    --rating-color: #f1c40f;
+    --favorite-color: #e74c3c;
+    --border-color: #ddd;
+}
+
+.detailed-view-page {
+    background-color: var(--background-color);
+    font-family: 'Poppins', sans-serif;
+}
+
+.book-detail-container {
+    max-width: 1100px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+.book-detail-card {
+    display: flex;
+    background-color: var(--card-background);
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    gap: 3rem;
+    padding: 2.5rem;
+}
+
+.book-detail-image-wrapper {
+    flex: 0 0 300px;
+}
+
+.book-detail-cover {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.book-detail-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.book-detail-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin: 0;
+}
+
+.book-detail-author {
+    font-size: 1.2rem;
+    color: #777;
+    margin: 0.25rem 0 1.5rem 0;
+    font-weight: 300;
+}
+
+.book-detail-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    color: var(--rating-color);
+    font-size: 1.2rem;
+}
+
+.review-count {
+    margin-left: 0.5rem;
+    font-size: 1rem;
+    color: #777;
+}
+
+.book-detail-description {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+}
+
+.book-meta-info {
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.book-meta-info p {
+    margin: 0.5rem 0;
+}
+
+.book-detail-actions {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.book-detail-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+/* New container for the buttons */
+.book-detail-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.add-to-cart-detailed-btn {
+    padding: 0.8rem 2rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-to-cart-detailed-btn:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+}
+
+/* New styles for the favorite button */
+.favorite-detailed-btn {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    color: var(--border-color);
+    border-radius: 50%; /* Makes it a circle */
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.favorite-detailed-btn:hover {
+    border-color: var(--favorite-color);
+    color: var(--favorite-color);
+}
+
+.favorite-detailed-btn.active {
+    background-color: var(--favorite-color);
+    color: white;
+    border-color: var(--favorite-color);
+}
+
+
+/* Responsive Design */
+@media screen and (max-width: 900px) {
+    .book-detail-card {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .book-detail-image-wrapper {
+        flex-basis: auto;
+        text-align: center;
+    }
+
+    .book-detail-cover {
+        max-width: 250px;
+    }
+
+    .book-detail-title {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .book-detail-actions {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .book-detail-buttons {
+        justify-content: center;
+    }
+    
+    .add-to-cart-detailed-btn {
+        flex-grow: 1;
+    }
+}

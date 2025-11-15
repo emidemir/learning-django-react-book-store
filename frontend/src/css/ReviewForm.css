@@ -1,0 +1,77 @@
+:root {
+    --primary-color: #3498db;
+    --button-hover: #2980b9;
+    --rating-color: #f1c40f;
+    --border-color: #ddd;
+    --background-color: #f9f9f9;
+}
+
+.review-form-container {
+    background-color: var(--background-color);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.review-form-container h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.star-rating button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 2rem;
+    padding: 0 0.2rem;
+}
+
+.star-rating .on {
+    color: var(--rating-color);
+}
+
+.star-rating .off {
+    color: #ccc;
+}
+
+.submit-review-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-review-btn:hover {
+    background-color: var(--button-hover);
+}

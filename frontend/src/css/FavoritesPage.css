@@ -1,0 +1,67 @@
+:root {
+    --background-color: #f4f6f8;
+    --secondary-color: #2c3e50;
+    --primary-color: #3498db;
+}
+
+.favorites-page {
+    background-color: var(--background-color);
+    min-height: 100vh;
+}
+
+.favorites-container {
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+.favorites-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.favorites-header h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.favorites-header p {
+    font-size: 1.1rem;
+    color: #777;
+}
+
+.favorites-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.empty-favorites {
+    text-align: center;
+    padding: 3rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.empty-favorites p {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.browse-books-link {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.browse-books-link:hover {
+    background-color: #2980b9;
+}

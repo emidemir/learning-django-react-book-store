@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nl2h*nvs2f7=k_a=06y@w_6x!&q91gk27z^(ocasb5gej43w6v'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -47,6 +47,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
 
     # Django apps
+    'users',
+    'books',
+    'transactions',
 
 
     # --- Allauth apps --- https://docs.allauth.org/en/dev/installation/quickstart.html
@@ -164,13 +167,13 @@ AUTH_USER_MODEL = 'users.CustomUser'
 REST_FRAMEWORK = {
 
     # AUTHETINCATION
-    'DEFAULT_AUTHENTICATION_CLASS':[
+    'DEFAULT_AUTHENTICATION_CLASSES':[
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
 
     # PERMISSIONS
-    'DEFAULT_PERMISSION_CLASS': [
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.DjangoModelPermissions',
     ],

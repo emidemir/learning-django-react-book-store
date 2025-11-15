@@ -1,0 +1,46 @@
+:root {
+    --card-background: #ffffff;
+    --secondary-color: #2c3e50;
+    --rating-color: #f1c40f;
+    --border-color: #eee;
+}
+
+.review-card {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.review-author {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.review-rating {
+    font-size: 1rem;
+    color: var(--rating-color);
+}
+
+.review-comment {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+.review-date {
+    font-size: 0.85rem;
+    color: #999;
+    text-align: right;
+    margin: 0;
+}
