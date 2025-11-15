@@ -1,6 +1,8 @@
 import React from 'react';
 import '../css/Navbar.css'
 
+import { Link } from 'react-router-dom'
+
 const Navbar = () => {
     return (
         <nav className="navbar">
@@ -15,7 +17,7 @@ const Navbar = () => {
                         <a href="/favorites" className="nav-links">Favorites</a>
                     </li>
                     <li className="nav-item">
-                        <a href="/account" className="nav-links">Account</a>
+                        <Link to='/profile' className="nav-links">Account</Link>
                     </li>
                     <li className="nav-item">
                         <a href="/cart" className="nav-links cart-link">

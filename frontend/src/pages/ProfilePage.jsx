@@ -1,21 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import '../css/ProfilePage.css';
 
-// Sample user data - this will come from your backend API
-const initialUserData = {
-    username: 'JaneDoe',
-    email: 'jane.doe@example.com',
-    bio: 'An avid reader and aspiring writer. My favorite genres are fantasy and historical fiction.',
-    profilePicture: 'https://via.placeholder.com/150'
-};
 
 const ProfilePage = () => {
     const [isEditMode, setIsEditMode] = useState(false);
-    const [userData, setUserData] = useState(initialUserData);
-    const [formData, setFormData] = useState(initialUserData);
+    const [userData, setUserData] = useState({}); // Used for displaying user data
+    const [formData, setFormData] = useState({}); // Used for updating user data
 
+    const authToken = localStorage.getItem("access_token");
+    const userID = localStorage.getItem("userID")
+
+    // Initial retrieval of profile data
+    useEffect(()=>{
+        const retrieveProfile = async () => {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/profiles/${userID}/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${authToken}`,
+                }
+            })
+            const data = await response.json()
+            
+            if (response.ok){
+                const profileData = {
+                    username: data.user.username,
+                    email: data.user.email,
+                    bio: data.bio,
+                    profilePicture: data.avatar
+                }
+                setUserData(profileData);
+                setFormData(profileData);
+            }else{
+                alert("Error retrieving profile data: " + JSON.stringify(data))
+            }
+        }
+
+        retrieveProfile()
+    },[])
+
+    // Called when a data is changed while editing
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({
@@ -24,18 +50,35 @@ const ProfilePage = () => {
         }));
     };
 
+    // When changed are canceled
     const handleEditToggle = () => {
         setIsEditMode(!isEditMode);
-        // Reset form data to current user data when entering edit mode
+        
         setFormData(userData); 
     };
     
-    const handleSaveChanges = (e) => {
+    // Called when changes are saved
+    const handleSaveChanges = async (e) => {
         e.preventDefault();
-        // API call to save updated user data will be handled here
-        console.log('Saving data:', formData);
         
-        setUserData(formData); // Update the main user data
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/profiles/${userID}/`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${authToken}`,
+            },
+            body: JSON.stringify(formData)
+        })
+
+        const data = await response.json()
+
+        if (response.ok){
+            alert("Successfully edited profile information!");
+            setUserData(formData); // Update the main user data
+        }else{
+            alert("Failed edit operation: " + JSON.stringify(data))
+        }
+
         setIsEditMode(false); // Exit edit mode
     };
 

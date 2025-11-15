@@ -39,6 +39,11 @@ const AuthPage = () => {
         if (response.ok){
             alert("Successfully logged in!");
             setIsLogin(true);
+
+            localStorage.setItem("userID", data.user.id);
+            localStorage.setItem("access_token", data.access);
+            localStorage.setItem("refresh_token", data.refresh);
+
             navigate('/home');
         }else{
             alert("Signin failed: " + JSON.stringify(data));
@@ -68,7 +73,6 @@ const AuthPage = () => {
         if(response.ok){
             alert("Account created successfully!");
             setIsLogin(true);
-            navigate('/home');
         }else{
             alert("Signup failed: " + JSON.stringify(data));
         }
@@ -88,6 +92,7 @@ const AuthPage = () => {
             const data = await response.json()
                 
             if (response.ok){
+                localStorage.setItem("user", data.user);
                 localStorage.setItem('access_token', data.access);
                 localStorage.setItem('refresh_token', data.refresh);
                 
@@ -112,12 +117,12 @@ const AuthPage = () => {
                 {isLogin ? (
                     <form onSubmit={handleLogin}>
                         <div className="input-group">
-                            <label htmlFor="email">Email</label>
-                            <input type="email" id="email" required />
+                            <label htmlFor="email" >Email</label>
+                            <input type="email" id="email" required onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className="input-group">
                             <label htmlFor="password">Password</label>
-                            <input type="password" id="password" required />
+                            <input type="password" id="password" required onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         <button type="submit" className="auth-button">Login</button>
                     </form>
