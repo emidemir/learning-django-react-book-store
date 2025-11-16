@@ -11,12 +11,12 @@ def user_directory_path(instance, filename):
 class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
-    is_verified = models.BooleanField(default=False)
-    verification_code = models.CharField(max_length=6, blank=False, null=True)
+    is_verified = models.BooleanField(default=123456)
+    verification_code = models.CharField(max_length=6, blank=True, null=True)
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(CustomUser)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, null=True)
     avatar = models.ImageField(upload_to=user_directory_path, default='default.jpg', blank=True)
-    favorite_books = models.ManyToManyField('books.Book', on_delete=models.CASCADE)
+    favorite_books = models.ManyToManyField('books.Book', null=True, blank=True)
