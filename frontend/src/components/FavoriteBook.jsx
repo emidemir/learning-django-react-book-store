@@ -49,7 +49,7 @@ const FavoriteBook = ({ book, onRemove }) => {
             <img src={cover_image} alt={`${title} cover`} className="favorite-book-cover" />
             <div className="favorite-book-details">
                 <h3 className="favorite-book-title">{title}</h3>
-                <p className="favorite-book-author">by {author}</p>
+                <p className="favorite-book-author">by {author.name}</p>
                 <p className="favorite-book-price">${price}</p>
             </div>
             <div className="favorite-book-actions">

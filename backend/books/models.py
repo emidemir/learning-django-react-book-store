@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 def book_cover_directory_path(instance, filename):
@@ -24,3 +25,10 @@ class Book(models.Model):
     publication_date = models.DateTimeField()
     page = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    rating = models.IntegerField(
+        default=3,
+        validators=[
+            MinValueValidator(0, message='Rating cannot be less than 0.'),
+            MaxValueValidator(5, message='Rating cannot be greater than 5.')
+        ]
+    )

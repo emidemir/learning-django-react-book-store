@@ -92,13 +92,13 @@ const Book = ({ bookID, book }) => {
 
     return (
         <div className="book-card">
-            <Link to='/detailed-view' state={{bookID:bookID}} className="book-card-link-wrapper">
+            <Link to='/detailed-view' state={{bookID: bookID}} className="book-card-link-wrapper">
                 <div className="book-image-container">
                     <img src={cover_image} alt={`${title} cover`} className="book-image" />
                 </div>
                 <div className="book-details">
                     <h3 className="book-title">{title}</h3>
-                    <p className="book-author">by {author}</p>
+                    <p className="book-author">by {author.name}</p>
                     <p className="book-price">${price}</p>
                 </div>
             </Link>

@@ -4,17 +4,24 @@ from .models import Book
 from .models import Genre
 from .models import Author
 
-class BookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Book
-        fields = '__all__'
-
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
-        fields = '__all__'
+        fields = ['id', 'name']
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = '__all__'
+        fields = ['id', 'name']
+
+class BookSerializer(serializers.ModelSerializer):
+    genres = GenreSerializer(many=True, read_only=True)
+    author = AuthorSerializer()
+    class Meta:
+        model = Book
+        fields = [
+            'id', 'title', 'author', 'genres', 'description', 
+            'price', 'cover_image', 'publication_date', 'page', 'rating'
+        ]
+
+

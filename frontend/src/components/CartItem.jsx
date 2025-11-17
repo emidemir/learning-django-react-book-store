@@ -16,7 +16,7 @@ const CartItem = ({ book, itemID, onQuantityChange, onRemove, quantity }) => {
             <img src={cover_image} alt={`${title} cover`} className="cart-item-cover" />
             <div className="cart-item-details">
                 <h3 className="cart-item-title">{title}</h3>
-                <p className="cart-item-author">by {author}</p>
+                <p className="cart-item-author">by {author.name}</p>
                 <p className="cart-item-price">${price}</p>
             </div>
             <div className="cart-item-quantity-controls">

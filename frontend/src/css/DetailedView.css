@@ -72,6 +72,15 @@
     font-size: 1.2rem;
 }
 
+.book-detail-rating a {
+    /* Make the link behave like a container for the stars and count */
+    display: flex; 
+    align-items: center;
+    text-decoration: none; /* Remove underline */
+    color: inherit;       /* Ensure the stars retain the rating-color */
+    transition: opacity 0.2s ease; /* Optional: Add hover effect */
+}
+
 .review-count {
     margin-left: 0.5rem;
     font-size: 1rem;
@@ -83,6 +92,17 @@
     line-height: 1.8;
     color: var(--text-color);
     margin-bottom: 2rem;
+}
+
+.book-detail-rating a:hover {
+    opacity: 0.8;
+}
+
+.review-count {
+    margin-left: 0.5rem;
+    /* Ensure review count text maintains its color */
+    color: #777; 
+    font-size: 1rem;
 }
 
 .book-meta-info {
