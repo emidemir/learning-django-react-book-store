@@ -17,6 +17,11 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    
+    def get_queryset(self):
+        book_id = self.request.query_params.get('book_id', None)
+        qs = Review.objects.filter(book=book_id)
+        return qs
 
 class FavoritesViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]

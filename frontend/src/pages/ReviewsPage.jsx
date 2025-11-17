@@ -1,22 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Review from '../components/Review';
 import ReviewForm from '../components/ReviewForm';
+
+import { useLocation } from 'react-router-dom'
 import '../css/ReviewsPage.css';
 
-// Sample data for existing reviews - this will come from your backend
-const initialReviews = [
-    { id: 1, author: 'Jane Doe', rating: 5, comment: 'An absolute masterpiece! I couldn\'t put it down. The characters are so well-developed.', date: '2025-10-22' },
-    { id: 2, author: 'John Smith', rating: 4, comment: 'A very thought-provoking read. The ending was a bit unexpected but satisfying. Highly recommend.', date: '2025-10-15' },
-    { id: 3, author: 'Emily White', rating: 3, comment: 'It was an okay book. The plot felt a bit slow in the middle, but the concept was interesting.', date: '2025-10-05' },
-];
-
-// Sample book title for context
-const bookTitle = "The Midnight Library";
-
 const ReviewsPage = () => {
-    const [reviews, setReviews] = useState(initialReviews);
+    const [reviews, setReviews] = useState({});
+    const location = useLocation()
+    const {bookID, bookTitle} = location.state || {}
+
+    const authToken = localStorage.getItem("access_token");
+
+    useEffect(()=>{
+        const getReviews = async () => {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/reviews/?book_id=${bookID}`,{
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${authToken}`,
+                }
+            })
+            const data = await response.json();
+
+            if (response.ok){
+                setReviews(data);
+                // setReviews({
+                //     id: data.id,
+                //     rating: data.rating,
+                //     comment: data.comment,
+                //     date: data.created_at,
+                //     author: data.commenter_username
+                // })
+            }else{
+                alert("Reviews could not be fetched: " + JSON.stringify(data))
+            }
+        }
+
+        getReviews()
+    },[authToken, bookID])
 
     const handleReviewSubmit = (newReview) => {
         // Here you would send the review to your backend API.

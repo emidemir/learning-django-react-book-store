@@ -140,7 +140,7 @@ const DetailedView = () => {
                         <p className="book-detail-author">by {book.author}</p>
                         
                         <div className="book-detail-rating">
-                            <Link to='/reviews'>
+                            <Link to='/reviews' state={{bookID: bookID, bookTitle: book.title}}>
                                 <span>{'★'.repeat(Math.round(book.rating))}</span>
                                 <span>{'☆'.repeat(5 - Math.round(book.rating))}</span>
                                 <span className="review-count">({book.reviews} reviews)</span>
