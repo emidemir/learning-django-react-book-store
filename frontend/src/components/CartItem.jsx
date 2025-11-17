@@ -1,8 +1,8 @@
 import React from 'react';
 import '../css/CartItem.css';
 
-const CartItem = ({ item, onQuantityChange, onRemove }) => {
-    const { id, title, author, price, cover_image, quantity } = item;
+const CartItem = ({ book, itemID, onQuantityChange, onRemove, quantity }) => {
+    const { id, title, author, price, cover_image } = book;
 
     const handleQuantityUpdate = (newQuantity) => {
         // Ensure quantity is at least 1
@@ -25,7 +25,7 @@ const CartItem = ({ item, onQuantityChange, onRemove }) => {
                 <button onClick={() => handleQuantityUpdate(quantity + 1)}>+</button>
             </div>
             <p className="cart-item-subtotal">${(price * quantity).toFixed(2)}</p>
-            <button className="cart-item-remove-btn" onClick={() => onRemove(id)}>
+            <button className="cart-item-remove-btn" onClick={() => onRemove(itemID)}>
                 &times;
             </button>
         </div>

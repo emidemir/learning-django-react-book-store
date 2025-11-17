@@ -8,6 +8,7 @@ const ProfilePage = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [userData, setUserData] = useState({}); // Used for displaying user data
     const [formData, setFormData] = useState({}); // Used for updating user data
+    const [avatarFile, setAvatarFile] = useState(null); // Used for updating avatar
 
     const authToken = localStorage.getItem("access_token");
     const userID = localStorage.getItem("userID")
@@ -26,10 +27,12 @@ const ProfilePage = () => {
             
             if (response.ok){
                 const profileData = {
-                    username: data.user.username,
-                    email: data.user.email,
+                    username: data.username,
+                    email: data.email,
+                    first_name: data.first_name,
+                    last_name: data.last_name,
                     bio: data.bio,
-                    profilePicture: data.avatar
+                    profilePicture: `${process.env.REACT_APP_BACKEND_URL}${data.img_url}`
                 }
                 setUserData(profileData);
                 setFormData(profileData);
@@ -41,7 +44,7 @@ const ProfilePage = () => {
         retrieveProfile()
     },[])
 
-    // Called when a data is changed while editing
+    // Called when a data (text) is changed while editing
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prevData => ({
@@ -49,37 +52,70 @@ const ProfilePage = () => {
             [name]: value
         }));
     };
+    
+    // Called when a data (file) is changed while editing
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setAvatarFile(file);
+            // Preview the image
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData(prevData => ({
+                    ...prevData,
+                    profilePicture: reader.result
+                }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     // When changed are canceled
     const handleEditToggle = () => {
         setIsEditMode(!isEditMode);
-        
+        setAvatarFile(null); // Reset file
         setFormData(userData); 
     };
     
     // Called when changes are saved
     const handleSaveChanges = async (e) => {
         e.preventDefault();
+
+        const formDataToSend = new FormData();
+        formDataToSend.append('username', formData.username);
+        formDataToSend.append('email', formData.email);
+        formDataToSend.append('first_name', formData.first_name);
+        formDataToSend.append('last_name', formData.last_name);
+        formDataToSend.append('bio', formData.bio || '');
+        
+        // Only append avatar if a new file was selected
+        if (avatarFile) {
+            formDataToSend.append('avatar', avatarFile);
+        }
         
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/profiles/${userID}/`, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json",
+                // REMOVED Content-Type header - browser sets it automatically for FormData
                 "Authorization": `Bearer ${authToken}`,
             },
-            body: JSON.stringify(formData)
+            body: formDataToSend
         })
 
         const data = await response.json()
 
         if (response.ok){
             alert("Successfully edited profile information!");
-            setUserData(formData); // Update the main user data
+            setUserData({
+                ...formData,
+                profilePicture: `${process.env.REACT_APP_BACKEND_URL}${data.avatar}`
+            });
         }else{
             alert("Failed edit operation: " + JSON.stringify(data))
         }
 
         setIsEditMode(false); // Exit edit mode
+        setAvatarFile(null); // Reset file
     };
 
     return (
@@ -93,8 +129,25 @@ const ProfilePage = () => {
                 
                 <div className="profile-card">
                     <div className="profile-picture-section">
-                        <img src={userData.profilePicture} alt="User Profile" />
-                        {isEditMode && <button className="change-picture-btn">Change Picture</button>}
+                        <img src={formData.profilePicture || userData.profilePicture} alt="User Profile" />
+                        {isEditMode && (
+                            <>
+                                <button 
+                                    type="button"
+                                    className="change-picture-btn"
+                                    onClick={() => document.getElementById('avatar-upload').click()}
+                                >
+                                    Change Picture
+                                </button>
+                                <input 
+                                    id="avatar-upload"
+                                    type="file" 
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }}
+                                />
+                            </>
+                        )}
                     </div>
 
                     <div className="profile-details-section">
@@ -103,6 +156,14 @@ const ProfilePage = () => {
                                 <div className="detail-item">
                                     <label>Username</label>
                                     <p>{userData.username}</p>
+                                </div>
+                                <div className="detail-item">
+                                    <label>First Name</label>
+                                    <p>{userData.first_name}</p>
+                                </div>
+                                <div className="detail-item">
+                                    <label>Last Name</label>
+                                    <p>{userData.last_name}</p>
                                 </div>
                                 <div className="detail-item">
                                     <label>Email</label>
@@ -127,6 +188,26 @@ const ProfilePage = () => {
                                     />
                                 </div>
                                 <div className="detail-item-edit">
+                                    <label htmlFor="first_name">First Name</label>
+                                    <input 
+                                        type="text" 
+                                        id="first_name"
+                                        name="first_name"
+                                        value={formData.first_name}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                                <div className="detail-item-edit">
+                                    <label htmlFor="last_name">Last Name</label>
+                                    <input 
+                                        type="text" 
+                                        id="last_name"
+                                        name="last_name"
+                                        value={formData.last_name}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                                <div className="detail-item-edit">
                                     <label htmlFor="email">Email</label>
                                     <input 
                                         type="email" 
@@ -142,7 +223,7 @@ const ProfilePage = () => {
                                         id="bio"
                                         name="bio"
                                         rows="4"
-                                        value={formData.bio}
+                                        value={formData.bio || ''}
                                         onChange={handleInputChange}
                                     ></textarea>
                                 </div>

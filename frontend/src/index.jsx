@@ -11,7 +11,7 @@ import DetailedViewPage from './pages/DetailedView'
 import FavoritesPage from './pages/FavoritesPage'
 import ReviewsPage from './pages/ReviewsPage'
 import ProfilePage from './pages/ProfilePage'
-import CartPage from './pages/CartPage'
+import ShoppingCart from './pages/ShoppingCart'
 
 const router = createBrowserRouter([
   {path:'/', element:<App/>},
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
   {path:'/favorites', element:<FavoritesPage/>},
   {path:'/reviews', element:<ReviewsPage/>},
   {path:'/profile', element:<ProfilePage/>},
-  {path:'/cart', element:<CartPage/>},
+  {path:'/cart', element:<ShoppingCart/>},
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

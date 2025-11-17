@@ -7,7 +7,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-container">
-                <a href="/" className="navbar-logo">Bookstore</a>
+                <Link to='/home' className="navbar-logo">Bookstore</Link>
                 <div className="search-container">
                     <input type="text" placeholder="Search for books..." className="search-input" />
                     <button className="search-button">Search</button>

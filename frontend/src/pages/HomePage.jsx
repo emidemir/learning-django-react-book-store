@@ -5,50 +5,59 @@ import Book from '../components/Book';
 import Pagination from '../components/Pagination'; // Import the new component
 import '../css/HomePage.css';
 
-// Expanded sample book data to demonstrate pagination
-const allBooks = [
-    // Page 1
-    { id: 1, title: 'The Midnight Library', author: 'Matt Haig', price: '15.99', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+1' },
-    { id: 2, title: 'Dune', author: 'Frank Herbert', price: '18.50', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+2' },
-    { id: 3, title: 'Project Hail Mary', author: 'Andy Weir', price: '22.00', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+3' },
-    { id: 4, title: 'Klara and the Sun', author: 'Kazuo Ishiguro', price: '19.99', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+4' },
-    { id: 5, title: 'Atomic Habits', author: 'James Clear', price: '14.75', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+5' },
-    { id: 6, title: 'The Silent Patient', author: 'Alex Michaelides', price: '12.99', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+6' },
-    // Page 2
-    { id: 7, title: 'Circe', author: 'Madeline Miller', price: '16.99', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+7' },
-    { id: 8, title: 'The Four Winds', author: 'Kristin Hannah', price: '20.50', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+8' },
-    { id: 9, title: 'Where the Crawdads Sing', author: 'Delia Owens', price: '14.00', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+9' },
-    // Page 3
-    { id: 10, title: 'Educated', author: 'Tara Westover', price: '17.99', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+10' },
-    { id: 11, title: 'The Vanishing Half', author: 'Brit Bennett', price: '16.25', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+11' },
-    { id: 12, title: 'Anxious People', author: 'Fredrik Backman', price: '18.99', cover_image: 'https://via.placeholder.com/280x420.png?text=Book+12' },
-];
-
-const BOOKS_PER_PAGE = 6;
-
 const HomePage = () => {
-    const [currentPage, setCurrentPage] = useState(1);
+
+    const authToken = localStorage.getItem("access_token")
+    const page_size = 2; // The number of books I want to fetch at one request, pagination number query param
+
+    const [previousPage, setPreviousPage] = useState('');
+    const [currentPage, setCurrentPage] = useState(`${process.env.REACT_APP_BACKEND_URL}/books/?page=1&page_size=${page_size}`);
+    const [nextPage, setNextPage] = useState();
+
     const [displayedBooks, setDisplayedBooks] = useState([]);
+    const [totalPages, setTotalPages] = useState(-1);
+    const [currentPageNumber, setCurrentPageNumber] = useState(1);
 
-    const totalPages = Math.ceil(allBooks.length / BOOKS_PER_PAGE);
-
-    // This useEffect simulates fetching data when the page changes
     useEffect(() => {
-        const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
-        const endIndex = startIndex + BOOKS_PER_PAGE;
-        setDisplayedBooks(allBooks.slice(startIndex, endIndex));
+        const getBooksHomePage = async () => {
+            const response = await fetch(currentPage, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${authToken}`,
+                }
+            })
+            
+            const data = await response.json()
+            
+            const book_amount = data.count  // Total book number in the database
+            
+            setTotalPages(Math.ceil(book_amount / page_size));
+            setPreviousPage(data.previous);
+            setNextPage(data.next);
 
-        // In the future, your API call will go here.
-        // You'll pass the `currentPage` to the backend.
-        // e.g., fetch(`api/books?page=${currentPage}&limit=${BOOKS_PER_PAGE}`)
-        
-    }, [currentPage]);
-
-    const handlePageChange = (pageNumber) => {
-        if (pageNumber > 0 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
-            window.scrollTo(0, 0); // Scroll to top on page change
+            if (response.ok){
+                setDisplayedBooks(data.results)
+                
+                const urlParams = new URLSearchParams(new URL(currentPage).search);
+                const pageNum = parseInt(urlParams.get('page')) || 1;
+                setCurrentPageNumber(pageNum);
+            }else{
+                alert("Failed to get book data on HomePage" + JSON.stringify(data))
+            }
         }
+        getBooksHomePage()
+    }, [currentPage, authToken]);
+
+    const handlePageChange = (page, intPassed) => {
+        if (intPassed){
+            if (page > 0 && page <= totalPages) {
+                setCurrentPage(`${process.env.REACT_APP_BACKEND_URL}/books/?page=${page}&page_size=${page_size}`)
+            }
+        }else{
+            setCurrentPage(page)
+        }
+        window.scrollTo(0, 0); // Scroll to top on page change
     };
 
     return (
@@ -68,13 +77,16 @@ const HomePage = () => {
                     <h2 className="section-title">Featured Books</h2>
                     <div className="book-grid">
                         {displayedBooks.map(book => (
-                            <Book key={book.id} book={book} />
+                            <Book bookID={book.id} book={book} />
                         ))}
                     </div>
                     <Pagination 
-                        currentPage={currentPage}
-                        totalPages={totalPages}
+                        prevPage = {previousPage}
+                        currentPage = {currentPage}
+                        nextPage = {nextPage}
                         onPageChange={handlePageChange}
+                        currentPageINT = {currentPageNumber}
+                        totalPagesINT={totalPages}
                     />
                 </section>
             </main>

@@ -38,5 +38,7 @@ urlpatterns = [
     path('', include('config.routers')),
 ]
 
+# Don't forget tı add this for MEDIA URL
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
