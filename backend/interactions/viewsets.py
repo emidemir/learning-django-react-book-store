@@ -10,18 +10,41 @@ from .permissions import IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly
 from .models import Review
 from books.models import Book
 
-from .serializers import ReviewSerializer
+from .serializers import ReviewWriteSerializer, ReviewReadSerializer
 from books.serializers import BookSerializer
 
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     
     def get_queryset(self):
         book_id = self.request.query_params.get('book_id', None)
         qs = Review.objects.filter(book=book_id)
         return qs
+    
+    def get_serializer_class(self):
+        if self.action in ['create', 'update', 'partial_update']:
+            return ReviewWriteSerializer
+        return ReviewReadSerializer
+    
+    def perform_create(self, serializer):
+        book_id = self.request.query_params.get('book_id')
+        
+        if not book_id:
+            raise serializer.ValidationError({"detail": "Book ID must be provided in the query parameters."})
+
+        # The user is the currently authenticated user
+        user = self.request.user
+        
+        # Save the review, automatically linking the user and the book
+        # Note: We must fetch the Book object since the Review model expects an instance.
+        try:
+            book_instance = Book.objects.get(id=book_id) # Make sure to import Book model
+        except Book.DoesNotExist:
+             raise serializer.ValidationError({"book_id": "Invalid book ID."})
+
+
+        serializer.save(user=user, book=book_instance)
 
 class FavoritesViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
