@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FavoriteBook from '../components/FavoriteBook';
+import { Link } from 'react-router-dom';
 import '../css/FavoritesPage.css';
 
 const FavoritesPage = () => {
@@ -54,7 +55,7 @@ const FavoritesPage = () => {
                     ) : (
                         <div className="empty-favorites">
                             <p>You haven't added any books to your favorites yet.</p>
-                            <a href="/" className="browse-books-link">Browse Books</a>
+                            <Link to='/home' className="browse-books-link">Browse Books</Link>
                         </div>
                     )}
                 </div>

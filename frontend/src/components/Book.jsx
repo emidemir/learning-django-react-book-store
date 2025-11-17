@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import '../css/Book.css'
 
 const Book = ({ bookID, book }) => {
@@ -36,6 +37,12 @@ const Book = ({ bookID, book }) => {
 
         checkFavoriteStatus();
     }, [authToken, bookID]);
+
+    const handleButtonClick = (e, handler) => {
+        e.preventDefault(); // Prevents the browser's default action (if any)
+        e.stopPropagation(); // Stops the click from bubbling up to the Link parent
+        handler(); // Execute the actual logic (cart/favorite toggle)
+    };
 
     const handleFavoriteToggle = async () => {
 
@@ -85,23 +92,25 @@ const Book = ({ bookID, book }) => {
 
     return (
         <div className="book-card">
-            <div className="book-image-container">
-                <img src={cover_image} alt={`${title} cover`} className="book-image" />
-            </div>
-            <div className="book-details">
-                <h3 className="book-title">{title}</h3>
-                <p className="book-author">by {author}</p>
-                <p className="book-price">${price}</p>
-                <div className="book-actions">
-                    <button className="add-to-cart-btn" onClick={handleCartToggle}>Add to Cart</button>
-                    <button 
-                        className={`favorite-btn ${isFavorite ? 'active' : ''}`}
-                        onClick={handleFavoriteToggle}
-                        aria-label="Add to favorites"
-                    >
-                        ♥
-                    </button>
+            <Link to='/detailed-view' state={{bookID:bookID}} className="book-card-link-wrapper">
+                <div className="book-image-container">
+                    <img src={cover_image} alt={`${title} cover`} className="book-image" />
                 </div>
+                <div className="book-details">
+                    <h3 className="book-title">{title}</h3>
+                    <p className="book-author">by {author}</p>
+                    <p className="book-price">${price}</p>
+                </div>
+            </Link>
+            <div className="book-actions">
+                <button className="add-to-cart-btn" onClick={(e) => handleButtonClick(e, handleCartToggle)}>Add to Cart</button>
+                <button 
+                    className={`favorite-btn ${isFavorite ? 'active' : ''}`}
+                    onClick={(e) => handleButtonClick(e, handleFavoriteToggle)}
+                    aria-label="Add to favorites"
+                >
+                    ♥
+                </button>
             </div>
         </div>
     );

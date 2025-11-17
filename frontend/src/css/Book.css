@@ -44,7 +44,6 @@
     text-align: center;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
 }
 
 .book-title {
@@ -110,4 +109,25 @@
     background-color: var(--favorite-color);
     color: white;
     border-color: var(--favorite-color);
+}
+
+.book-card-link-wrapper {
+    /* Set the link wrapper to be a flex column to contain the details */
+    display: flex;
+    flex-direction: column;
+    text-decoration: none; /* 🛑 FIX 1: Removes the ugly underline */
+    color: inherit;       /* Ensures text color is inherited from parent or explicitly set */
+    flex-grow: 1;         /* Allows the linked content to take up vertical space */
+    cursor: pointer;
+}
+
+/* Ensure child elements don't inherit default link color */
+.book-card-link-wrapper .book-title {
+    /* 🛑 FIX 2: Ensure the title retains its intended color */
+    color: var(--secondary-color);
+}
+
+.book-card-link-wrapper .book-price {
+    /* 🛑 FIX 3: Ensure the price retains its primary color */
+    color: var(--primary-color);
 }

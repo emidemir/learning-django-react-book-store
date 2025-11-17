@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CartItem from '../components/CartItem';
+import { Link } from 'react-router-dom';
 import '../css/CartPage.css';
 
 const SHIPPING_COST = 5.00;
@@ -97,7 +98,7 @@ const ShoppingCart = () => {
                         ) : (
                             <div className="empty-cart">
                                 <p>Your cart is currently empty.</p>
-                                <a href="/" className="browse-books-link">Continue Shopping</a>
+                                <Link to='/home' className="browse-books-link">Go shopping</Link>
                             </div>
                         )}
                     </div>
